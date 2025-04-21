@@ -1,12 +1,16 @@
 import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDTO } from './dto/register.dto';
-import * as bcryptjs from 'bcryptjs';
 import { LoginDTO } from './dto/login.dto';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly JwtService: JwtService,
+  ) {}
 
   async login(loginData: LoginDTO) {
     try {
@@ -26,7 +30,10 @@ export class AuthService {
         throw new HttpException('Invalid password', 401);
       }
 
-      return user;
+      const payload = { email: user.email, sub: user.id };
+      const token = this.JwtService.sign(payload);
+
+      return token;
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
