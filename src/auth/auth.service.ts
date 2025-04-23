@@ -30,7 +30,12 @@ export class AuthService {
         throw new HttpException('Invalid password', 401);
       }
 
-      const payload = { email: user.email, sub: user.id, name: user.name };
+      const payload = {
+        email: user.email,
+        sub: user.id,
+        name: user.name,
+        role: user.role,
+      };
       const token = this.JwtService.sign(payload);
 
       return token;

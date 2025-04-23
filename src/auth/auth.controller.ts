@@ -3,6 +3,9 @@ import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginDTO } from './dto/login.dto';
 import { AuthGuard } from './guard/auth.guard';
+import { RolesGuard } from './guard/roles.guard';
+import { Roles } from './decorators/roles.decorator';
+import { Role } from './enums/role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +28,8 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(AuthGuard)
+  @Roles(Role.EDITOR)
+  @UseGuards(AuthGuard, RolesGuard)
   me(
     @Req()
     req: Request,
