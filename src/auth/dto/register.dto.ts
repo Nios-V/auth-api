@@ -15,4 +15,10 @@ export class RegisterDTO {
   @MinLength(6)
   @MaxLength(20)
   password: string;
+
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @MinLength(4)
+  @MaxLength(10)
+  role: string;
 }
