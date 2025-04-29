@@ -1,5 +1,14 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  ArrayUnique,
+  IsArray,
+  IsEmail,
+  IsInt,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterDTO {
   @Transform(({ value }) => value.trim())
@@ -16,9 +25,9 @@ export class RegisterDTO {
   @MaxLength(20)
   password: string;
 
-  @Transform(({ value }) => value.trim())
-  @IsString()
-  @MinLength(4)
-  @MaxLength(10)
-  role: string;
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  @IsInt({ each: true })
+  roles: number[];
 }

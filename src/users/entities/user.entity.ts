@@ -1,8 +1,11 @@
+import { Role } from 'src/roles/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -21,8 +24,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ default: 'user' })
-  role: string;
+  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
+  @JoinTable()
+  roles: Role[];
 
   @Column()
   password: string;

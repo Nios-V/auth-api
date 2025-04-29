@@ -1,8 +1,10 @@
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,9 @@ export class Role {
 
   @Column({ default: 'user' })
   description: string;
+
+  @ManyToMany(() => User, (user) => user.roles)
+  users: User[];
 
   @CreateDateColumn()
   createdAt: Date;
