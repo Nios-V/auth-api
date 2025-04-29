@@ -26,7 +26,7 @@ export class AuthController {
   }
 
   @Get('me')
-  @Auth(Role.USER)
+  @Auth([Role.USER])
   me(
     @Req()
     req: Request,
@@ -35,7 +35,7 @@ export class AuthController {
   }
 
   @Get('admin/dashboard')
-  @Auth(Role.ADMIN)
+  @Auth([Role.ADMIN])
   adminDashboard(
     @Req()
     req: Request,
@@ -44,7 +44,7 @@ export class AuthController {
   }
 
   @Get('editor/tasks')
-  @Auth(Role.EDITOR)
+  @Auth([Role.EDITOR])
   editorTasks(
     @Req()
     req: Request,
