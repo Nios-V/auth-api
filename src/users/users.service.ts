@@ -24,6 +24,9 @@ export class UsersService {
     return this.userRepository.save(user);
   }
   async findOneByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email } });
+    return this.userRepository.findOne({
+      where: { email },
+      relations: ['roles'],
+    });
   }
 }
