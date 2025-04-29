@@ -1,35 +1,30 @@
-import { Role } from 'src/roles/entities/role.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class User {
+export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column({ default: true })
   active: boolean;
 
-  @Column({ unique: true })
-  email: string;
+  @Column({ default: 'user' })
+  description: string;
 
-  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
-  @JoinTable()
-  roles: Role[];
-
-  @Column()
-  password: string;
+  @ManyToMany(() => User, (user) => user.roles)
+  users: User[];
 
   @CreateDateColumn()
   createdAt: Date;
