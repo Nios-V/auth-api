@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -28,5 +28,36 @@ export class UsersService {
       where: { email },
       relations: ['roles'],
     });
+  }
+
+  async assignRoles(id: number, roleIds: number[]) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+        relations: ['roles'],
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      const roles = await this.roleService.findByIds(roleIds);
+
+      if (roles.length === 0) {
+        throw new NotFoundException('Roles not found');
+      }
+
+      user.roles = roles;
+      return this.userRepository.save(user);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          `Failed assigning roles: ${error.message}`,
+          500,
+        );
+      }
+    }
   }
 }
