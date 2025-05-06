@@ -15,8 +15,8 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const { roles: rolesIds, ...userData } = createUserDto;
+    if (!rolesIds.includes(1)) rolesIds.push(1);
     const roles = await this.roleService.findByIds(rolesIds);
-    console.log(roles);
     const user = this.userRepository.create({
       ...userData,
       roles,
